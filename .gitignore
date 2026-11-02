@@ -1,6 +1,15 @@
 node_modules
 dist
-.env
-.env.local
-.env.*.local
+coverage
 *.log
+
+# Environment files: never commit real keys. Only the template is tracked.
+.env
+.env.*
+!.env.example
+
+# Private keys / credentials
+*.pem
+*.key
+*.p12
+.npmrc

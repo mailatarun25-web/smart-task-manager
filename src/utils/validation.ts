@@ -24,6 +24,10 @@ export function validateTask(
 
   if (!isStr(r.title) || !r.title.trim()) errors.push(`${label}: title is required`);
   else if (r.title.length > 300) errors.push(`${label}: title is longer than 300 characters`);
+  for (const key of ['description', 'notes'] as const) {
+    if (r[key] != null && (!isStr(r[key]) || (r[key] as string).length > 10000))
+      errors.push(`${label}: ${key} must be text of at most 10000 characters`);
+  }
   if (!CATEGORIES.includes(r.category as never))
     errors.push(`${label}: category must be one of ${CATEGORIES.join(', ')}`);
   if (!IMPORTANCE_LEVELS.includes(r.importance as never))

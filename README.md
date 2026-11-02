@@ -64,6 +64,16 @@ All three views read **one** task list from `useTasks`. When you change a task o
 
 > 🔐 **Never use the `service_role` / secret key in this app.** It bypasses RLS, and anything in a `VITE_*` variable ends up in the public JavaScript. The anon key is meant to be public: RLS limits it to the signed-in user's own rows.
 
+### Security checklist (Supabase dashboard)
+
+These settings live in Supabase, not in this code, so set them yourself:
+
+- **Turn off sign-ups once you've created your account:** **Authentication → Sign In / Providers → Allow new users to sign up: off**. Otherwise anyone who finds the public URL can create an account. They still can't see your tasks, but they could store their own data in your project.
+- **Keep email confirmation on** (**Confirm email**, enabled by default).
+- **Require longer passwords:** under **Authentication → Policies** (or **Providers → Email**), set the minimum password length to at least **8**, to match the app.
+- **Never share** the `service_role` / secret key or the database password. The app doesn't need either of them. The build refuses to run if a secret key is placed in `VITE_SUPABASE_ANON_KEY`.
+- If you ever suspect a key has leaked, rotate it under **Project Settings → API Keys**. Then update the GitHub secret and re-run the deploy workflow.
+
 ## 2. Deploy to GitHub Pages
 
 1. Create a GitHub repository (e.g. `smart-task-manager`) and push this folder to its `main` branch.

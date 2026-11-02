@@ -33,9 +33,18 @@ create table if not exists public.tasks (
 
 create index if not exists tasks_user_id_idx on public.tasks (user_id);
 
+-- Size limits so one account can't fill the database with huge text.
+-- (Added with ALTER so they also apply to tables created by an earlier version.)
+alter table public.tasks drop constraint if exists tasks_description_len;
+alter table public.tasks add constraint tasks_description_len check (char_length(description) <= 10000);
+alter table public.tasks drop constraint if exists tasks_notes_len;
+alter table public.tasks add constraint tasks_notes_len check (char_length(notes) <= 10000);
+
 -- Server-side timestamp so both PCs agree on one clock.
 create or replace function public.tasks_set_updated_at()
-returns trigger language plpgsql as $$
+returns trigger language plpgsql
+set search_path = ''
+as $$
 begin
   new.updated_at := now();
   return new;

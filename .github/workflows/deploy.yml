@@ -24,12 +24,17 @@ jobs:
           node-version: 22
           cache: npm
       - name: Check Supabase config is present
+        # Secrets are passed as environment variables, never pasted into the script text.
+        env:
+          URL_SET: ${{ secrets.VITE_SUPABASE_URL != '' }}
+          KEY_SET: ${{ secrets.VITE_SUPABASE_ANON_KEY != '' }}
         run: |
-          if [ -z "${{ secrets.VITE_SUPABASE_URL }}" ] || [ -z "${{ secrets.VITE_SUPABASE_ANON_KEY }}" ]; then
+          if [ "$URL_SET" != "true" ] || [ "$KEY_SET" != "true" ]; then
             echo "::error::Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY under Settings → Secrets and variables → Actions"
             exit 1
           fi
       - run: npm ci
+      - run: npm audit --omit=dev --audit-level=high
       - run: npm test
       - name: Build
         run: npm run build

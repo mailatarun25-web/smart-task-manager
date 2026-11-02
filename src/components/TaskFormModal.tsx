@@ -85,7 +85,7 @@ export function TaskFormModal({
         </div>
         <div className="sm:col-span-2">
           <Field label="Description">
-            <textarea className={inputCls} rows={2} value={f.description} onChange={(e) => set('description', e.target.value)} />
+            <textarea className={inputCls} rows={2} value={f.description} onChange={(e) => set('description', e.target.value)} maxLength={10000} />
           </Field>
         </div>
         <div>
@@ -143,7 +143,7 @@ export function TaskFormModal({
         </div>
         <div className="sm:col-span-2">
           <Field label="Notes">
-            <textarea className={inputCls} rows={2} value={f.notes} onChange={(e) => set('notes', e.target.value)} />
+            <textarea className={inputCls} rows={2} value={f.notes} onChange={(e) => set('notes', e.target.value)} maxLength={10000} />
           </Field>
         </div>
       </form>
